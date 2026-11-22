@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Çiğdem'in Kasımpatısı</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg-midnight: #020504;
+      --bg-emerald-deep: #061812;
+      --bg-emerald-mid: #0b291f;
+      --bg-emerald-soft: #103729;
+      --gold-champagne: #f6e2ac;
+      --gold-foil: #e8bd61;
+      --gold-amber: #d9821f;
+      --flower-scale: clamp(0.56, min(56vw, 52vh) / 370px, 1.16);
+      --mx: 0;
+      --my: 0;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-midnight);
+      color: var(--gold-champagne);
+      font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+    }
+
+    .svg-defs {
+      position: fixed;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    /* ============================================================
+       ATMOSFER VE SİNEMATİK ARKA PLAN
+       ============================================================ */
+    .stage {
+      position: relative;
+      width: 100vw;
+      height: 100dvh;
+      overflow: hidden;
+      background:
+        radial-gradient(
+          ellipse 66% 58% at 50% 42%,
+          rgba(16, 56, 42, 0.62) 0%,
+          rgba(8, 30, 23, 0.72) 38%,
+          rgba(4, 13, 10, 0.94) 72%,
+          #020504 100%
+        ),
+        radial-gradient(
+          circle at 22% 18%,
+          rgba(18, 55, 40, 0.36) 0%,
+          transparent 54%
+        ),
+        radial-gradient(
+          circle at 80% 78%,
+          rgba(22, 42, 26, 0.28) 0%,
+          transparent 52%
+        ),
+        #020504;
+    }
+
+    .atmosphere {
+      position: absolute;
+      inset: -6%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse 74% 70% at 50% 45%,
+        transparent 45%,
+        rgba(1, 4, 3, 0.56) 80%,
+        rgba(0, 2, 1, 0.9) 100%
+      );
+      z-index: 12;
+    }
+
+    .cinema-grain {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.04;
+      mix-blend-mode: overlay;
+      z-index: 13;
+    }
+
+    /* Işık Huzmeleri (Volumetric Light Shafts) */
+    .light-rays {
+      position: absolute;
+      inset: -15%;
+      pointer-events: none;
+      transform: translate3d(calc(var(--mx) * -12px), calc(var(--my) * -9px), 0);
+      will-change: transform;
+    }
+
+    .ray {
+      position: absolute;
+      top: -20%;
+      height: 145%;
+      transform-origin: top center;
+      filter: blur(24px);
+      mix-blend-mode: screen;
+      animation: ray-pulse 11s ease-in-out infinite alternate;
+    }
+
+    .ray-1 {
+      left: 22%;
+      width: 18vw;
+      transform: rotate(-24deg);
+      background: linear-gradient(
+        180deg,
+        rgba(248, 212, 134, 0.095) 0%,
+        rgba(218, 152, 56, 0.05) 45%,
+        transparent 88%
+      );
+    }
+
+    .ray-2 {
+      left: 41%;
+      width: 24vw;
+      transform: rotate(-18deg);
+      animation-delay: -3.5s;
+      animation-duration: 13s;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 224, 158, 0.08) 0%,
+        rgba(232, 165, 62, 0.04) 50%,
+        transparent 90%
+      );
+    }
+
+    .ray-3 {
+      left: 60%;
+      width: 14vw;
+      transform: rotate(-11deg);
+      animation-delay: -6.5s;
+      animation-duration: 15s;
+      background: linear-gradient(
+        180deg,
+        rgba(175, 220, 185, 0.045) 0%,
+        rgba(240, 190, 95, 0.03) 48%,
+        transparent 85%
+      );
+    }
+
+    @keyframes ray-pulse {
+      0% {
+        opacity: 0.45;
+      }
+      50% {
+        opacity: 0.85;
+      }
+      100% {
+        opacity: 0.58;
+      }
+    }
+
+    /* Çiçek Arkasındaki Ortam Işığı (Ambient Glow) */
+    .ambient-glow {
+      position: absolute;
+      left: 50%;
+      top: 43%;
+      width: min(72vw, 660px);
+      height: min(72vw, 660px);
+      transform: translate3d(
+        calc(-50% + var(--mx) * 14px),
+        calc(-50% + var(--my) * 11px),
+        0
+      );
+      pointer-events: none;
+      z-index: 1;
+      will-change: transform;
+    }
+
+    .ambient-glow-core {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at 50% 48%,
+        rgba(255, 206, 102, 0.34) 0%,
+        rgba(235, 138, 32, 0.22) 26%,
+        rgba(166, 82, 14, 0.11) 48%,
+        rgba(24, 72, 48, 0.06) 68%,
+        transparent 80%
+      );
+      filter: blur(28px);
+      opacity: 0.28;
+      transform: scale(0.58);
+    }
+
+    .stage.is-playing .ambient-glow-core {
+      animation:
+        ambient-bloom 3.9s cubic-bezier(0.22, 0.9, 0.28, 1) forwards,
+        ambient-breathe 7.5s ease-in-out 3.9s infinite;
+    }
+
+    .ambient-glow-halo {
+      position: absolute;
+      inset: -16%;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at 46% 45%,
+        rgba(250, 196, 88, 0.14) 0%,
+        rgba(26, 88, 62, 0.12) 45%,
+        transparent 74%
+      );
+      filter: blur(44px);
+      opacity: 0.65;
+    }
+
+    @keyframes ambient-bloom {
+      0% {
+        opacity: 0.18;
+        transform: scale(0.46);
+      }
+      55% {
+        opacity: 0.72;
+        transform: scale(0.92);
+      }
+      100% {
+        opacity: 0.92;
+        transform: scale(1.06);
+      }
+    }
+
+    @keyframes ambient-breathe {
+      0%,
+      100% {
+        opacity: 0.88;
+        transform: scale(1.04);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.11);
+      }
+    }
+
+    /* Çok Katmanlı Bokeh ve Altın Toz Parçacıkları */
+    .parallax-layer {
+      position: absolute;
+      inset: -6%;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    .layer-far {
+      z-index: 2;
+      transform: translate3d(calc(var(--mx) * -14px), calc(var(--my) * -10px), 0);
+    }
+
+    .layer-mid {
+      z-index: 3;
+      transform: translate3d(calc(var(--mx) * -28px), calc(var(--my) * -22px), 0);
+    }
+
+    .layer-near {
+      z-index: 8;
+      transform: translate3d(calc(var(--mx) * 24px), calc(var(--my) * 18px), 0);
+    }
+
+    .bokeh-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: bokeh-drift var(--b-dur, 18s) ease-in-out var(--b-del, 0s) infinite alternate;
+    }
+
+    .bokeh-orb.soft {
+      filter: blur(var(--b-blur, 10px));
+    }
+
+    .bokeh-orb.lens {
+      backdrop-filter: blur(4px) saturate(1.2);
+      -webkit-backdrop-filter: blur(4px) saturate(1.2);
+      border: 1px solid rgba(255, 224, 152, 0.11);
+      box-shadow:
+        inset 0 0 18px rgba(255, 214, 120, 0.12),
+        0 0 26px rgba(235, 165, 58, 0.08);
+    }
+
+    @keyframes bokeh-drift {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+        opacity: var(--b-op, 0.35);
+      }
+      50% {
+        transform: translate3d(var(--b-dx, 14px), var(--b-dy, -18px), 0) scale(1.08);
+        opacity: calc(var(--b-op, 0.35) * 1.32);
+      }
+      100% {
+        transform: translate3d(calc(var(--b-dx, 14px) * -0.6), calc(var(--b-dy, -18px) * 0.5), 0) scale(0.95);
+        opacity: calc(var(--b-op, 0.35) * 0.85);
+      }
+    }
+
+    .dust-speck {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(
+        circle at 38% 38%,
+        #fff9dc 0%,
+        #ffd46e 44%,
+        rgba(232, 146, 36, 0.16) 76%,
+        transparent 100%
+      );
+      box-shadow: 0 0 var(--d-glow, 8px) rgba(255, 210, 104, 0.55);
+      animation:
+        dust-float var(--d-dur, 15s) linear var(--d-del, 0s) infinite,
+        dust-twinkle var(--d-twinkle, 4.4s) ease-in-out var(--d-del, 0s) infinite alternate;
+    }
+
+    @keyframes dust-float {
+      0% {
+        transform: translate3d(0, 24px, 0);
+      }
+      50% {
+        transform: translate3d(var(--d-drift-x, 22px), -45px, 0);
+      }
+      100% {
+        transform: translate3d(calc(var(--d-drift-x, 22px) * -0.45), -120px, 0);
+      }
+    }
+
+    @keyframes dust-twinkle {
+      0% {
+        opacity: 0.14;
+      }
+      50% {
+        opacity: var(--d-op, 0.82);
+      }
+      100% {
+        opacity: 0.25;
+      }
+    }
+
+    /* ============================================================
+       3D KASIMPATI SAHNESİ (KESİN preserve-3d HİYERARŞİSİ)
+       ÖNEMLİ: .parallax-rig -> .flower-sway -> .bloom-stage ->
+       .petal-whorl -> .petal-slot -> .petal-arm zincirinde ASLA filter,
+       backdrop-filter, clip-path, mask-image veya opacity < 1 kullanılmaz.
+       ============================================================ */
+    .scene {
+      position: absolute;
+      inset: 0;
+      perspective: 1200px;
+      perspective-origin: 50% 43%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .parallax-rig {
+      position: absolute;
+      left: 50%;
+      top: 43%;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      overflow: visible;
+      pointer-events: auto;
+      cursor: pointer;
+      transform:
+        translate3d(calc(var(--mx) * 11px), calc(var(--my) * 9px), 0)
+        rotateY(calc(var(--mx) * 13deg))
+        rotateX(calc(var(--my) * -11deg))
+        scale(var(--flower-scale));
+      will-change: transform;
+    }
+
+    .flower-sway {
+      position: relative;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      overflow: visible;
+    }
+
+    .stage.is-playing .flower-sway {
+      animation: idle-sway 9s ease-in-out 2.8s infinite;
+    }
+
+    @keyframes idle-sway {
+      0%,
+      100% {
+        transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+      }
+      25% {
+        transform: translate3d(2.5px, -3.5px, 3px) rotateX(2.1deg) rotateY(-2.4deg) rotateZ(1.1deg) scale(1.012);
+      }
+      55% {
+        transform: translate3d(-1.5px, -1.5px, 1px) rotateX(-1.4deg) rotateY(2.2deg) rotateZ(-1deg) scale(1.005);
+      }
+      80% {
+        transform: translate3d(-2.5px, 2.5px, -2px) rotateX(1.2deg) rotateY(1.4deg) rotateZ(-0.6deg) scale(0.996);
+      }
+    }
+
+    .bloom-stage {
+      position: relative;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      overflow: visible;
+      transform: scale(0.56) rotateX(36deg) rotateZ(-14deg);
+    }
+
+    .stage.is-playing .bloom-stage {
+      animation: bloom-master 3.85s cubic-bezier(0.22, 0.92, 0.28, 1) forwards;
+    }
+
+    @keyframes bloom-master {
+      0% {
+        transform: scale(0.56) rotateX(36deg) rotateZ(-14deg);
+      }
+      42% {
+        transform: scale(0.84) rotateX(24deg) rotateZ(-4deg);
+      }
+      100% {
+        transform: scale(1) rotateX(16deg) rotateZ(0deg);
+      }
+    }
+
+    .receptacle-base {
+      position: absolute;
+      left: -36px;
+      top: -36px;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      transform: translateZ(-20px);
+      background: radial-gradient(circle, #3d1203 0%, #1d0802 62%, #0a1f14 100%);
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.8);
+      pointer-events: none;
+    }
+
+    /* Zümrüt Yeşili Yapraklar ve Çanak Yapraklar (Foliage & Calyx) */
+    .foliage-layer {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      overflow: visible;
+      transform: translateZ(-36px);
+      pointer-events: none;
+    }
+
+    .leaf-wrap {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--lw, 220px);
+      height: var(--lh, 160px);
+      transform-origin: 0% 50%;
+      transform-style: preserve-3d;
+      overflow: visible;
+      transform: rotateZ(var(--l-rot, 0deg)) translate3d(var(--l-tx, 22px), var(--l-ty, -50%), 0);
+    }
+
+    .leaf-svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.68)) blur(0.45px);
+      transform-origin: 0% 50%;
+      transform: scale(0.58) rotateX(10deg);
+    }
+
+    .stage.is-playing .leaf-svg {
+      animation: leaf-unfurl 3.6s cubic-bezier(0.22, 0.9, 0.3, 1) var(--l-del, 0.1s) forwards;
+    }
+
+    @keyframes leaf-unfurl {
+      0% {
+        transform: scale(0.58) rotateX(10deg);
+      }
+      100% {
+        transform: scale(1) rotateX(-4deg);
+      }
+    }
+
+    .calyx-layer {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      overflow: visible;
+      transform: translateZ(-24px);
+      pointer-events: none;
+    }
+
+    .sepal-slot {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      overflow: visible;
+      transform: rotateZ(var(--sz, 0deg)) translateY(-18px);
+    }
+
+    .sepal-arm {
+      position: absolute;
+      left: -10px;
+      bottom: 0;
+      width: 20px;
+      height: 76px;
+      transform-origin: 50% 100%;
+      transform-style: preserve-3d;
+      overflow: visible;
+      transform: rotateX(-76deg) scaleY(0.84);
+    }
+
+    .stage.is-playing .sepal-arm {
+      animation: sepal-open 3.1s cubic-bezier(0.22, 0.9, 0.3, 1) 0.1s forwards;
+    }
+
+    @keyframes sepal-open {
+      0% {
+        transform: rotateX(-76deg) scaleY(0.84);
+      }
+      100% {
+        transform: rotateX(14deg) scaleY(1);
+      }
+    }
+
+    .sepal-blade {
+      width: 100%;
+      height: 100%;
+      border-radius: 52% 48% 36% 36% / 84% 84% 16% 16%;
+      background:
+        linear-gradient(90deg, rgba(164, 210, 128, 0.18) 0%, transparent 25%, transparent 75%, rgba(6, 20, 12, 0.45) 100%),
+        linear-gradient(180deg, #4b7438 0%, #244a2a 48%, #0e2618 100%);
+      box-shadow:
+        inset 0 2px 6px rgba(170, 212, 132, 0.2),
+        0 8px 16px rgba(0, 0, 0, 0.6);
+    }
+
+    /* ============================================================
+       TAÇ YAPRAKLAR (PETALS) - 156 ADET, 8 HALKADA KATMANLI
+       ============================================================ */
+    .petals-container {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      overflow: visible;
+    }
+
+    .petal-whorl {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      overflow: visible;
+    }
+
+    .petal-slot {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      overflow: visible;
+      transform: translateZ(var(--z, 0px)) rotateZ(var(--az, 0deg)) translateY(calc(-1 * var(--r-base, 18px)));
+    }
+
+    .petal-arm {
+      position: absolute;
+      left: calc(var(--w, 26px) * -0.5);
+      bottom: 0;
+      width: var(--w, 26px);
+      height: var(--h, 150px);
+      transform-origin: 50% 100%;
+      transform-style: preserve-3d;
+      overflow: visible;
+      transform:
+        rotateX(var(--rx-bud, -94deg))
+        rotateY(var(--ry-bud, 6deg))
+        rotateZ(var(--rz-bud, 0deg))
+        scaleX(var(--sx-bud, 0.86))
+        scaleY(var(--sy-bud, 0.62));
+    }
+
+    .stage.is-playing .petal-arm {
+      animation: bloom-petal var(--dur, 2.8s) cubic-bezier(0.22, 0.92, 0.3, 1) var(--del, 0.2s) forwards;
+    }
+
+    @keyframes bloom-petal {
+      0% {
+        transform:
+          rotateX(var(--rx-bud, -94deg))
+          rotateY(var(--ry-bud, 6deg))
+          rotateZ(var(--rz-bud, 0deg))
+          scaleX(var(--sx-bud, 0.86))
+          scaleY(var(--sy-bud, 0.62));
+      }
+      48% {
+        transform:
+          rotateX(var(--rx-mid, -52deg))
+          rotateY(calc(var(--ry-bud, 6deg) * 0.45))
+          rotateZ(calc(var(--rz-bud, 0deg) * 0.4))
+          scaleX(0.95)
+          scaleY(0.88);
+      }
+      100% {
+        transform:
+          rotateX(var(--rx-open, -20deg))
+          rotateY(var(--ry-open, 0deg))
+          rotateZ(var(--rz-open, 0deg))
+          scaleX(1)
+          scaleY(1);
+      }
+    }
+
+    /* Tekil Taç Yaprağın Fotorealistik Gölgelendirmesi, Damar Dokusu ve Subsurface Scattering */
+    .petal-blade {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: var(--br, 48% 52% 48% 48% / 32% 33% 67% 68%);
+      transform-origin: 50% 100%;
+      backface-visibility: visible;
+      background-image:
+        /* 1. İnce uç kıvrımında ışık geçirgenliği (Subsurface Scattering) */
+        radial-gradient(
+          ellipse 88% 42% at 50% 14%,
+          var(--c-sss, rgba(255, 241, 168, 0.56)) 0%,
+          rgba(255, 206, 94, 0.18) 54%,
+          transparent 84%
+        ),
+        /* 2. Boylamsal içbükey oluk, parlak kenar ve orta damar hattı (3D yüzey derinliği) */
+        linear-gradient(
+          90deg,
+          var(--c-rim-l, rgba(255, 242, 185, 0.48)) 0%,
+          rgba(255, 198, 92, 0.14) 14%,
+          rgba(62, 14, 2, 0.24) 31%,
+          rgba(255, 224, 138, 0.22) 48%,
+          rgba(255, 240, 178, 0.34) 50%,
+          rgba(255, 224, 138, 0.22) 52%,
+          rgba(62, 14, 2, 0.26) 69%,
+          rgba(255, 194, 86, 0.12) 86%,
+          var(--c-rim-r, rgba(255, 232, 158, 0.32)) 100%
+        ),
+        /* 3. Organik lifli dikey mikro-damar çizgileri */
+        repeating-linear-gradient(
+          90deg,
+          transparent 0px,
+          transparent 2.4px,
+          rgba(95, 28, 3, 0.13) 2.9px,
+          transparent 3.4px,
+          rgba(255, 238, 170, 0.1) 4.4px,
+          transparent 5px
+        ),
+        /* 4. Ana renk geçişi: koyu yanık amber boğaz -> sıcak turuncu -> altın sarısı uç */
+        linear-gradient(
+          180deg,
+          var(--c-tip, #ffe88f) 0%,
+          var(--c-high, #f8bc2c) 24%,
+          var(--c-mid, #ea7d14) 58%,
+          var(--c-base, #b83c07) 84%,
+          var(--c-throat, #3a0d02) 100%
+        );
+      box-shadow:
+        /* Üst kıvrım kenarında ince sıcak ışık yansıması */
+        inset 0 2px 5px var(--c-lip, rgba(255, 249, 206, 0.72)),
+        /* Kenar kalınlık gölgeleri */
+        inset 2px 0 4px rgba(255, 228, 156, 0.22),
+        inset -2px 0 5px rgba(74, 16, 2, 0.42),
+        /* Taban içbükey ortam kapanma gölgesi (Ambient Occlusion) */
+        inset 0 -18px 20px -6px rgba(34, 6, 0, 0.85),
+        /* Alt katman yapraklara düşen yumuşak döküm gölge */
+        0 6px 14px rgba(10, 3, 0, 0.62),
+        0 2px 4px rgba(18, 5, 0, 0.5);
+    }
+
+    .stage.is-playing .petal-blade {
+      animation: petal-breathe var(--breeze-dur, 5.8s) ease-in-out var(--breeze-del, 3.6s) infinite alternate;
+    }
+
+    @keyframes petal-breathe {
+      0% {
+        transform: rotateX(0deg) rotateZ(0deg);
+      }
+      100% {
+        transform: rotateX(var(--breeze-rx, 1.8deg)) rotateZ(var(--breeze-rz, 0.6deg));
+      }
+    }
+
+    /* Kavisli Botanik Damar Ağı (Inline SVG Data URI) */
+    .petal-blade::before {
+      content: "";
+      position: absolute;
+      inset: 4% 8% 10% 8%;
+      border-radius: inherit;
+      pointer-events: none;
+      opacity: 0.48;
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 200' preserveAspectRatio='none'%3E%3Cpath d='M30 198 Q30 100 30 8 M30 185 Q21 120 18 14 M30 185 Q39 120 42 14 M30 175 Q13 115 9 28 M30 175 Q47 115 51 28 M30 160 Q7 110 4 48 M30 160 Q53 110 56 48' fill='none' stroke='%23631902' stroke-width='0.85' stroke-opacity='0.55'/%3E%3Cpath d='M30 194 Q30 100 30 6 M29.5 182 Q23 118 20 16 M30.5 182 Q37 118 40 16' fill='none' stroke='%23fff1b3' stroke-width='0.7' stroke-opacity='0.45'/%3E%3C/svg%3E");
+    }
+
+    /* Uç Kısmında Işıklı Kıvrım ve Parıltılı Kenar */
+    .petal-blade::after {
+      content: "";
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      top: 1.5%;
+      height: 28%;
+      border-radius: 50% 50% 40% 40% / 72% 72% 28% 28%;
+      pointer-events: none;
+      background: linear-gradient(
+        180deg,
+        var(--c-glow-tip, rgba(255, 248, 198, 0.52)) 0%,
+        rgba(255, 226, 134, 0.14) 55%,
+        transparent 100%
+      );
+    }
+
+    /* ============================================================
+       MERKEZ POLEN DOKUSU (DISC FLORETS & FIBONACCI SPIRAL)
+       ============================================================ */
+    .pollen-core {
+      position: absolute;
+      left: -22px;
+      top: -22px;
+      width: 44px;
+      height: 44px;
+      transform-style: preserve-3d;
+      overflow: visible;
+      transform: translateZ(12px) scale(0.32);
+      pointer-events: none;
+    }
+
+    .stage.is-playing .pollen-core {
+      animation: pollen-bloom 2.5s cubic-bezier(0.22, 0.9, 0.3, 1) 1.25s forwards;
+    }
+
+    @keyframes pollen-bloom {
+      0% {
+        transform: translateZ(12px) scale(0.32);
+      }
+      100% {
+        transform: translateZ(21px) scale(1);
+      }
+    }
+
+    .pollen-disc {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      transform: translateZ(0px);
+      background: radial-gradient(
+        circle at 42% 40%,
+        #fbe077 0%,
+        #e8a822 32%,
+        #9e520a 68%,
+        #441a03 100%
+      );
+      box-shadow:
+        inset 0 3px 8px rgba(255, 246, 192, 0.45),
+        inset 0 -8px 14px rgba(42, 11, 1, 0.82),
+        0 0 18px 4px rgba(52, 14, 2, 0.72),
+        0 4px 12px rgba(0, 0, 0, 0.65);
+    }
+
+    .pollen-texture {
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      transform: translateZ(0.8px);
+      filter: url(#pollen-grain);
+      opacity: 0.48;
+      background: radial-gradient(circle at 45% 42%, #ffec9c 0%, #c96f0e 72%, #3a1402 100%);
+    }
+
+    .floret-field {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      overflow: visible;
+    }
+
+    .floret {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--fs, 5px);
+      height: var(--fs, 5px);
+      margin-left: calc(var(--fs, 5px) * -0.5);
+      margin-top: calc(var(--fs, 5px) * -0.5);
+      border-radius: 50%;
+      transform: translate3d(var(--fx, 0px), var(--fy, 0px), var(--fz, 4px));
+      background: radial-gradient(
+        circle at 34% 32%,
+        var(--fc-top, #fff6b8) 0%,
+        var(--fc-mid, #f6ba2c) 46%,
+        var(--fc-dark, #7a3404) 100%
+      );
+      box-shadow:
+        0 1.5px 3px rgba(32, 8, 1, 0.7),
+        0 0 4px var(--fc-glow, rgba(255, 214, 92, 0.35));
+    }
+
+    /* ============================================================
+       ALTIN VARAK / ŞAMPANYA TİPOGRAFİ VE IŞIK HÜZMESİ
+       ============================================================ */
+    .title-wrap {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(4.4vh, 7.2vh, 9.2vh);
+      transform: translate3d(calc(-50% + var(--mx) * 5px), calc(var(--my) * 3px), 0);
+      will-change: transform;
+      width: max-content;
+      max-width: 92vw;
+      text-align: center;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .title-ornament {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 0 auto 12px auto;
+      width: clamp(130px, 28vw, 230px);
+      opacity: 0;
+      transform: translateY(10px) scaleX(0.5);
+    }
+
+    .stage.is-playing .title-ornament {
+      animation: ornament-reveal 1.2s cubic-bezier(0.22, 0.85, 0.3, 1) 2.55s forwards;
+    }
+
+    .ornament-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(244, 216, 148, 0.65) 100%
+      );
+    }
+
+    .ornament-line.right {
+      background: linear-gradient(
+        90deg,
+        rgba(244, 216, 148, 0.65) 0%,
+        transparent 100%
+      );
+    }
+
+    .ornament-diamond {
+      width: 5px;
+      height: 5px;
+      transform: rotate(45deg);
+      background: #fff3c8;
+      box-shadow: 0 0 10px rgba(255, 224, 144, 0.9);
+    }
+
+    @keyframes ornament-reveal {
+      0% {
+        opacity: 0;
+        transform: translateY(10px) scaleX(0.4);
+      }
+      100% {
+        opacity: 0.92;
+        transform: translateY(0) scaleX(1);
+      }
+    }
+
+    .title-stage {
+      position: relative;
+      display: inline-block;
+      padding: 6px 18px;
+    }
+
+    /* Yumuşak Altın Işık Hüzmesi Geçişi */
+    .title-beam {
+      position: absolute;
+      left: -18%;
+      top: -35%;
+      width: 52%;
+      height: 170%;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(255, 240, 188, 0.38) 0%,
+        rgba(246, 200, 102, 0.16) 44%,
+        transparent 74%
+      );
+      filter: blur(18px);
+      opacity: 0;
+      transform: translateX(-25%) scaleY(0.8);
+      mix-blend-mode: screen;
+    }
+
+    .stage.is-playing .title-beam {
+      animation: beam-sweep 2.1s cubic-bezier(0.32, 0.82, 0.35, 1) 2.65s forwards;
+    }
+
+    @keyframes beam-sweep {
+      0% {
+        opacity: 0;
+        transform: translateX(-20%) scaleY(0.82);
+      }
+      35% {
+        opacity: 0.95;
+        transform: translateX(60%) scaleY(1.04);
+      }
+      72% {
+        opacity: 0.68;
+        transform: translateX(145%) scaleY(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(210%) scaleY(0.9);
+      }
+    }
+
+    .title-text {
+      position: relative;
+      font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(1.75rem, 3.8vw, 3.25rem);
+      letter-spacing: 0.06em;
+      line-height: 1.3;
+      color: #f6e2ac;
+      filter: drop-shadow(0 3px 16px rgba(242, 194, 92, 0.28))
+        drop-shadow(0 0 32px rgba(208, 128, 32, 0.16));
+      white-space: nowrap;
+    }
+
+    .title-char {
+      display: inline-block;
+      padding: 0.16em 0.014em;
+      margin: -0.16em 0;
+      background-image: linear-gradient(
+        118deg,
+        #b8883b 0%,
+        #f5df9e 22%,
+        #fff9e4 38%,
+        #dca94b 54%,
+        #f8e7b5 74%,
+        #c49442 100%
+      );
+      background-size: 240% 100%;
+      background-position: 0% 50%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      opacity: 0;
+      transform: translate3d(0, 18px, 0) scale(0.96);
+      filter: blur(6px);
+    }
+
+    .title-space {
+      display: inline-block;
+      width: 0.28em;
+    }
+
+    .stage.is-playing .title-char {
+      animation:
+        char-float-in 1.05s cubic-bezier(0.2, 0.9, 0.28, 1) var(--c-del, 2.75s) forwards,
+        foil-shimmer 7.5s ease-in-out calc(var(--c-del, 2.75s) + 1.1s) infinite alternate;
+    }
+
+    @keyframes char-float-in {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 18px, 0) scale(0.96);
+        filter: blur(6px);
+      }
+      55% {
+        opacity: 0.9;
+        filter: blur(0.8px);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes foil-shimmer {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 100% 50%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .title-text {
+        font-size: clamp(1.5rem, 6.8vw, 2.35rem);
+        letter-spacing: 0.045em;
+      }
+      .title-wrap {
+        bottom: clamp(5vh, 7.5vh, 9.5vh);
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg class="svg-defs" aria-hidden="true">
+    <defs>
+      <!-- Polen Merkezi için Mikro Granülasyon Filtresi -->
+      <filter id="pollen-grain" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.58"
+          numOctaves="3"
+          seed="17"
+          result="noise"
+        />
+        <feSpecularLighting
+          in="noise"
+          surfaceScale="2.8"
+          specularConstant="1.15"
+          specularExponent="18"
+          lighting-color="#ffdd7a"
+          result="spec"
+        >
+          <fePointLight x="-20" y="-25" z="65" />
+        </feSpecularLighting>
+        <feComposite in="spec" in2="SourceAlpha" operator="in" result="clipped" />
+        <feBlend in="SourceGraphic" in2="clipped" mode="screen" />
+      </filter>
+
+      <!-- Sinematik İnce Film Kumu (Grain) -->
+      <filter id="cinema-film" x="0" y="0" width="100%" height="100%">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.82"
+          numOctaves="2"
+          stitchTiles="stitch"
+        />
+        <feColorMatrix type="saturate" values="0" />
+      </filter>
+
+      <!-- Koyu Zümrüt Yaprak Kenarı Organik Dokusu -->
+      <filter id="leaf-organic" x="-8%" y="-8%" width="116%" height="116%">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.045"
+          numOctaves="2"
+          seed="5"
+          result="turb"
+        />
+        <feDisplacementMap in="SourceGraphic" in2="turb" scale="2.2" />
+      </filter>
+
+      <!-- Yapraklar için Zümrüt Gradient Tanımları -->
+      <linearGradient id="leafGradMain" x1="0%" y1="30%" x2="100%" y2="70%">
+        <stop offset="0%" stop-color="#06160f" />
+        <stop offset="38%" stop-color="#0d2c1e" />
+        <stop offset="76%" stop-color="#17452e" />
+        <stop offset="100%" stop-color="#285c3a" />
+      </linearGradient>
+
+      <linearGradient id="leafGradShade" x1="10%" y1="0%" x2="90%" y2="100%">
+        <stop offset="0%" stop-color="#071a12" />
+        <stop offset="52%" stop-color="#0f3322" />
+        <stop offset="100%" stop-color="#1f4d31" />
+      </linearGradient>
+
+      <radialGradient id="leafWarmRim" cx="15%" cy="48%" r="72%">
+        <stop offset="0%" stop-color="#d89232" stop-opacity="0.28" />
+        <stop offset="48%" stop-color="#4e733b" stop-opacity="0.14" />
+        <stop offset="100%" stop-color="#06150e" stop-opacity="0" />
+      </radialGradient>
+
+      <!-- Yeniden Kullanılabilir Zümrüt Kasımpatı Yaprağı Sembolleri -->
+      <symbol id="leaf-main" viewBox="0 0 220 150">
+        <g filter="url(#leaf-organic)">
+          <path
+            d="M4,75 C28,70 42,50 64,44 C78,40 86,20 108,22 C122,23 128,36 140,34 C156,31 166,14 185,24 C196,30 198,46 190,56 C204,61 215,69 216,76 C215,84 202,91 188,96 C196,108 192,124 178,128 C162,132 150,116 136,116 C124,116 116,130 100,128 C82,126 76,104 58,98 C38,92 24,82 4,75 Z"
+            fill="url(#leafGradMain)"
+          />
+          <path
+            d="M4,75 C28,70 42,50 64,44 C78,40 86,20 108,22 C122,23 128,36 140,34 C156,31 166,14 185,24 C196,30 198,46 190,56 C204,61 215,69 216,76 C215,84 202,91 188,96 C196,108 192,124 178,128 C162,132 150,116 136,116 C124,116 116,130 100,128 C82,126 76,104 58,98 C38,92 24,82 4,75 Z"
+            fill="url(#leafWarmRim)"
+          />
+          <path
+            d="M8,75 C64,74 128,75 204,76 M62,74 Q86,52 108,30 M112,74 Q142,50 174,30 M68,75 Q88,98 104,120 M118,75 Q148,98 174,120"
+            fill="none"
+            stroke="#529067"
+            stroke-width="1.35"
+            stroke-opacity="0.46"
+          />
+        </g>
+      </symbol>
+
+      <symbol id="leaf-shade" viewBox="0 0 220 150">
+        <g filter="url(#leaf-organic)">
+          <path
+            d="M4,75 C28,70 42,50 64,44 C78,40 86,20 108,22 C122,23 128,36 140,34 C156,31 166,14 185,24 C196,30 198,46 190,56 C204,61 215,69 216,76 C215,84 202,91 188,96 C196,108 192,124 178,128 C162,132 150,116 136,116 C124,116 116,130 100,128 C82,126 76,104 58,98 C38,92 24,82 4,75 Z"
+            fill="url(#leafGradShade)"
+          />
+          <path
+            d="M4,75 C28,70 42,50 64,44 C78,40 86,20 108,22 C122,23 128,36 140,34 C156,31 166,14 185,24 C196,30 198,46 190,56 C204,61 215,69 216,76 C215,84 202,91 188,96 C196,108 192,124 178,128 C162,132 150,116 136,116 C124,116 116,130 100,128 C82,126 76,104 58,98 C38,92 24,82 4,75 Z"
+            fill="url(#leafWarmRim)"
+          />
+          <path
+            d="M8,75 C64,74 128,75 204,76 M62,74 Q86,52 108,30 M112,74 Q142,50 174,30 M68,75 Q88,98 104,120 M118,75 Q148,98 174,120"
+            fill="none"
+            stroke="#4b855e"
+            stroke-width="1.3"
+            stroke-opacity="0.42"
+          />
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <main class="stage" id="stage">
+    <div class="atmosphere">
+      <div class="light-rays">
+        <div class="ray ray-1"></div>
+        <div class="ray ray-2"></div>
+        <div class="ray ray-3"></div>
+      </div>
+
+      <div class="parallax-layer layer-far" id="layer-far"></div>
+      <div class="parallax-layer layer-mid" id="layer-mid"></div>
+    </div>
+
+    <div class="ambient-glow">
+      <div class="ambient-glow-halo"></div>
+      <div class="ambient-glow-core"></div>
+    </div>
+
+    <!-- 3D Kasımpatı Sahnesi -->
+    <section class="scene">
+      <div
+        class="parallax-rig"
+        id="flower-rig"
+        aria-label="Açılan 3D Kasımpatı Çiçeği — yeniden başlatmak için tıklayın"
+        title="Çiçeğin açılışını yeniden izlemek için tıklayın"
+      >
+        <div class="flower-sway">
+          <div class="bloom-stage">
+            <!-- Çiçek Tabanı (Receptacle Base) -->
+            <div class="receptacle-base" aria-hidden="true"></div>
+
+            <!-- Koyu Zümrüt Kasımpatı Yaprakları -->
+            <div class="foliage-layer" aria-hidden="true">
+              <div class="leaf-wrap" style="--lw: 218px; --lh: 152px; --l-rot: 138deg; --l-tx: 26px; --l-ty: -52%; --l-del: 0.14s;">
+                <svg class="leaf-svg" viewBox="0 0 220 150"><use href="#leaf-main" /></svg>
+              </div>
+              <div class="leaf-wrap" style="--lw: 205px; --lh: 144px; --l-rot: 42deg; --l-tx: 28px; --l-ty: -48%; --l-del: 0.22s;">
+                <svg class="leaf-svg" viewBox="0 0 220 150"><use href="#leaf-shade" /></svg>
+              </div>
+              <div class="leaf-wrap" style="--lw: 192px; --lh: 132px; --l-rot: -36deg; --l-tx: 34px; --l-ty: -50%; --l-del: 0.28s;">
+                <svg class="leaf-svg" viewBox="0 0 220 150"><use href="#leaf-main" /></svg>
+              </div>
+              <div class="leaf-wrap" style="--lw: 178px; --lh: 124px; --l-rot: 208deg; --l-tx: 32px; --l-ty: -49%; --l-del: 0.25s;">
+                <svg class="leaf-svg" viewBox="0 0 220 150"><use href="#leaf-shade" /></svg>
+              </div>
+              <div class="leaf-wrap" style="--lw: 168px; --lh: 118px; --l-rot: 88deg; --l-tx: 34px; --l-ty: -50%; --l-del: 0.18s;">
+                <svg class="leaf-svg" viewBox="0 0 220 150"><use href="#leaf-shade" /></svg>
+              </div>
+            </div>
+
+            <!-- Çanak Yaprak Halkası -->
+            <div class="calyx-layer" id="calyx-layer" aria-hidden="true"></div>
+
+            <!-- 156 Katmanlı Taç Yaprak -->
+            <div class="petals-container" id="flower-petals"></div>
+
+            <!-- Detaylı Polen Merkezi -->
+            <div class="pollen-core" id="pollen-core" aria-hidden="true">
+              <div class="pollen-disc"></div>
+              <div class="pollen-texture"></div>
+              <div class="floret-field" id="floret-field"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="parallax-layer layer-near" id="layer-near"></div>
+
+    <!-- Tipografi ve Altın Varak Başlık -->
+    <header class="title-wrap">
+      <div class="title-ornament" aria-hidden="true">
+        <span class="ornament-line"></span>
+        <span class="ornament-diamond"></span>
+        <span class="ornament-line right"></span>
+      </div>
+      <div class="title-stage">
+        <div class="title-beam" aria-hidden="true"></div>
+        <h1 class="title-text" id="title-text" aria-label="Çiğdem'in Kasımpatısı"></h1>
+      </div>
+    </header>
+
+    <div class="vignette"></div>
+    <svg class="cinema-grain" aria-hidden="true">
+      <rect width="100%" height="100%" filter="url(#cinema-film)" />
+    </svg>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      function createSeededRandom(seed) {
+        let s = seed >>> 0;
+        return function () {
+          s = (s * 1664525 + 1013904223) >>> 0;
+          return s / 4294967296;
+        };
+      }
+
+      const rand = createSeededRandom(20261122);
+
+      function randRange(min, max) {
+        return min + (max - min) * rand();
+      }
+
+      function clamp(val, min, max) {
+        return Math.min(max, Math.max(min, val));
+      }
+
+      /* ============================================================
+         1. ÇANAK YAPRAKLAR (CALYX SEPALS)
+         ============================================================ */
+      function buildCalyx() {
+        const calyx = document.getElementById("calyx-layer");
+        const count = 10;
+        const frag = document.createDocumentFragment();
+        for (let i = 0; i < count; i++) {
+          const slot = document.createElement("div");
+          slot.className = "sepal-slot";
+          const angle = i * (360 / count) + randRange(-5, 5);
+          slot.style.setProperty("--sz", angle.toFixed(2) + "deg");
+
+          const arm = document.createElement("div");
+          arm.className = "sepal-arm";
+          const blade = document.createElement("div");
+          blade.className = "sepal-blade";
+          arm.appendChild(blade);
+          slot.appendChild(arm);
+          frag.appendChild(slot);
+        }
+        calyx.appendChild(frag);
+      }
+
+      /* ============================================================
+         2. 156 TAÇ YAPRAK (8 HALKA - HİPER-GERÇEKÇİ RENK & IŞIK HESAPLAMASI)
+         ============================================================ */
+      function buildPetals() {
+        const container = document.getElementById("flower-petals");
+        const whorls = [
+          { count: 24, z: -16, rBase: 20, hMin: 158, hMax: 174, wMin: 27, wMax: 33, rxBud: -92, rxOpenMin: -2, rxOpenMax: 6, del: 0.14, dur: 2.94, syBud: 0.62, toneShift: -0.14 },
+          { count: 24, z: -11, rBase: 20, hMin: 146, hMax: 162, wMin: 25, wMax: 31, rxBud: -93, rxOpenMin: -14, rxOpenMax: -8, del: 0.31, dur: 2.88, syBud: 0.61, toneShift: -0.09 },
+          { count: 22, z: -6, rBase: 20, hMin: 132, hMax: 147, wMin: 23, wMax: 28, rxBud: -94, rxOpenMin: -23, rxOpenMax: -17, del: 0.48, dur: 2.82, syBud: 0.60, toneShift: -0.04 },
+          { count: 22, z: -1, rBase: 20, hMin: 116, hMax: 130, wMin: 21, wMax: 26, rxBud: -95, rxOpenMin: -31, rxOpenMax: -25, del: 0.66, dur: 2.76, syBud: 0.59, toneShift: 0.02 },
+          { count: 20, z: 4, rBase: 20, hMin: 98, hMax: 112, wMin: 19, wMax: 24, rxBud: -96, rxOpenMin: -39, rxOpenMax: -33, del: 0.84, dur: 2.70, syBud: 0.58, toneShift: 0.07 },
+          { count: 18, z: 9, rBase: 20.5, hMin: 80, hMax: 92, wMin: 17, wMax: 21, rxBud: -98, rxOpenMin: -46, rxOpenMax: -40, del: 1.02, dur: 2.62, syBud: 0.57, toneShift: 0.12 },
+          { count: 14, z: 14, rBase: 21, hMin: 60, hMax: 72, wMin: 15, wMax: 18, rxBud: -100, rxOpenMin: -54, rxOpenMax: -48, del: 1.18, dur: 2.54, syBud: 0.55, toneShift: 0.17 },
+          { count: 12, z: 19, rBase: 21.5, hMin: 42, hMax: 52, wMin: 12, wMax: 15, rxBud: -104, rxOpenMin: -62, rxOpenMax: -56, del: 1.32, dur: 2.45, syBud: 0.52, toneShift: 0.22 }
+        ];
+
+        const frag = document.createDocumentFragment();
+
+        whorls.forEach((whorl, wIdx) => {
+          const whorlEl = document.createElement("div");
+          whorlEl.className = "petal-whorl";
+          const step = 360 / whorl.count;
+          const whorlOffset = wIdx * 137.508;
+
+          for (let i = 0; i < whorl.count; i++) {
+            const angle = (whorlOffset + i * step + randRange(-3.1, 3.1)) % 360;
+            const normAngle = (angle + 360) % 360;
+
+            /* Sol-üst stüdyo ışığı yönüne göre fotorealistik HSL tonlama */
+            const lightFactor = Math.cos(((normAngle - 322) * Math.PI) / 180);
+            const lit = lightFactor * 0.5 + 0.5; /* 0..1 */
+            const warmLift = clamp(lit * 0.85 + whorl.toneShift + randRange(-0.04, 0.04), 0, 1);
+
+            const tipHue = 42 + warmLift * 6;
+            const tipLight = 68 + warmLift * 18;
+            const highHue = 35 + warmLift * 7;
+            const highLight = 52 + warmLift * 14;
+            const midHue = 24 + warmLift * 7;
+            const midLight = 42 + warmLift * 11;
+            const baseHue = 14 + warmLift * 6;
+            const baseLight = 24 + warmLift * 10;
+            const throatLight = 8 + warmLift * 5;
+
+            const sssAlpha = (0.34 + warmLift * 0.34).toFixed(2);
+            const rimL = (0.28 + warmLift * 0.36).toFixed(2);
+            const rimR = (0.18 + warmLift * 0.24).toFixed(2);
+            const lipAlpha = (0.45 + warmLift * 0.4).toFixed(2);
+
+            const h = randRange(whorl.hMin, whorl.hMax);
+            const w = randRange(whorl.wMin, whorl.wMax);
+
+            /* Z-fighting önlemek için katman içi mikro Z ve açı farkı */
+            const zMicro = whorl.z + (i % 2 === 0 ? 0.35 : -0.35) + randRange(-0.25, 0.25);
+            const rxBud = whorl.rxBud + randRange(-2.6, 2.6);
+            const rxOpen = randRange(whorl.rxOpenMin, whorl.rxOpenMax);
+            const rxMid = rxBud * 0.54 + rxOpen * 0.46;
+
+            const ryBud = (i % 2 === 0 ? 1 : -1) * randRange(4.5, 9.5);
+            const ryOpen = randRange(-2.8, 2.8);
+            const rzBud = randRange(-4.5, 4.5);
+            const rzOpen = randRange(-1.8, 1.8);
+
+            const del = whorl.del + (i / whorl.count) * 0.12 + randRange(-0.04, 0.05);
+            const dur = whorl.dur + randRange(-0.14, 0.14);
+
+            const tl = Math.round(randRange(46, 54));
+            const tr = 100 - tl;
+            const bl = 48;
+            const brVal = 48;
+            const vt = wIdx <= 2
+              ? Math.round(randRange(26, 32))
+              : wIdx <= 5
+                ? Math.round(randRange(33, 39))
+                : Math.round(randRange(38, 44));
+            const vb = 100 - vt;
+            const borderRadius = `${tl}% ${tr}% ${brVal}% ${bl}% / ${vt}% ${vt + 1}% ${vb - 1}% ${vb}%`;
+
+            const slot = document.createElement("div");
+            slot.className = "petal-slot";
+            slot.style.setProperty("--z", zMicro.toFixed(2) + "px");
+            slot.style.setProperty("--az", normAngle.toFixed(2) + "deg");
+            slot.style.setProperty("--r-base", (whorl.rBase + randRange(-0.2, 0.8)).toFixed(1) + "px");
+
+            const arm = document.createElement("div");
+            arm.className = "petal-arm";
+            arm.style.setProperty("--w", w.toFixed(1) + "px");
+            arm.style.setProperty("--h", h.toFixed(1) + "px");
+            arm.style.setProperty("--rx-bud", rxBud.toFixed(2) + "deg");
+            arm.style.setProperty("--rx-mid", rxMid.toFixed(2) + "deg");
+            arm.style.setProperty("--rx-open", rxOpen.toFixed(2) + "deg");
+            arm.style.setProperty("--ry-bud", ryBud.toFixed(2) + "deg");
+            arm.style.setProperty("--ry-open", ryOpen.toFixed(2) + "deg");
+            arm.style.setProperty("--rz-bud", rzBud.toFixed(2) + "deg");
+            arm.style.setProperty("--rz-open", rzOpen.toFixed(2) + "deg");
+            arm.style.setProperty("--sx-bud", randRange(0.8, 0.92).toFixed(2));
+            arm.style.setProperty("--sy-bud", (whorl.syBud + randRange(-0.04, 0.04)).toFixed(2));
+            arm.style.setProperty("--del", Math.max(0.05, del).toFixed(2) + "s");
+            arm.style.setProperty("--dur", dur.toFixed(2) + "s");
+
+            const blade = document.createElement("div");
+            blade.className = "petal-blade";
+            blade.style.setProperty("--br", borderRadius);
+            blade.style.setProperty("--c-tip", `hsl(${tipHue.toFixed(1)}, 97%, ${tipLight.toFixed(1)}%)`);
+            blade.style.setProperty("--c-high", `hsl(${highHue.toFixed(1)}, 94%, ${highLight.toFixed(1)}%)`);
+            blade.style.setProperty("--c-mid", `hsl(${midHue.toFixed(1)}, 90%, ${midLight.toFixed(1)}%)`);
+            blade.style.setProperty("--c-base", `hsl(${baseHue.toFixed(1)}, 88%, ${baseLight.toFixed(1)}%)`);
+            blade.style.setProperty("--c-throat", `hsl(11, 86%, ${throatLight.toFixed(1)}%)`);
+            blade.style.setProperty("--c-sss", `rgba(255, 244, 180, ${sssAlpha})`);
+            blade.style.setProperty("--c-rim-l", `rgba(255, 240, 178, ${rimL})`);
+            blade.style.setProperty("--c-rim-r", `rgba(255, 224, 144, ${rimR})`);
+            blade.style.setProperty("--c-lip", `rgba(255, 249, 208, ${lipAlpha})`);
+            blade.style.setProperty("--c-glow-tip", `rgba(255, 248, 200, ${(0.32 + warmLift * 0.3).toFixed(2)})`);
+            blade.style.setProperty("--breeze-dur", randRange(4.8, 7.2).toFixed(2) + "s");
+            blade.style.setProperty("--breeze-del", randRange(3.4, 5.1).toFixed(2) + "s");
+            blade.style.setProperty("--breeze-rx", randRange(1.2, 2.5).toFixed(2) + "deg");
+            blade.style.setProperty("--breeze-rz", randRange(-1.1, 1.1).toFixed(2) + "deg");
+
+            arm.appendChild(blade);
+            slot.appendChild(arm);
+            whorlEl.appendChild(slot);
+          }
+
+          frag.appendChild(whorlEl);
+        });
+
+        container.appendChild(frag);
+      }
+
+      /* ============================================================
+         3. VOGEL FİBONACCİ SARMALI İLE 3D POLEN DOKUSU
+         ============================================================ */
+      function buildPollenCore() {
+        const field = document.getElementById("floret-field");
+        const count = 68;
+        const goldenAngle = 137.507764 * (Math.PI / 180);
+        const maxRadius = 19;
+        const frag = document.createDocumentFragment();
+
+        for (let i = 0; i < count; i++) {
+          const ratio = (i + 0.5) / count;
+          const r = maxRadius * Math.sqrt(ratio);
+          const theta = i * goldenAngle;
+          const fx = Math.cos(theta) * r;
+          const fy = Math.sin(theta) * r;
+
+          /* Kubbe yüksekliği: merkezde daha yüksek, kenarlara doğru kavisli */
+          const dome = Math.sqrt(Math.max(0, 1 - ratio)) * 9.5 + 1.5;
+          const size = 3.1 + ratio * 2.9 + randRange(-0.25, 0.3);
+
+          const isOuter = ratio > 0.48;
+          const floret = document.createElement("span");
+          floret.className = "floret";
+          floret.style.setProperty("--fx", fx.toFixed(2) + "px");
+          floret.style.setProperty("--fy", fy.toFixed(2) + "px");
+          floret.style.setProperty("--fz", dome.toFixed(2) + "px");
+          floret.style.setProperty("--fs", size.toFixed(2) + "px");
+
+          if (isOuter) {
+            floret.style.setProperty("--fc-top", "#fff6ba");
+            floret.style.setProperty("--fc-mid", "#f7ba26");
+            floret.style.setProperty("--fc-dark", "#8a3c04");
+            floret.style.setProperty("--fc-glow", "rgba(255, 224, 114, 0.45)");
+          } else {
+            floret.style.setProperty("--fc-top", "#ffe48a");
+            floret.style.setProperty("--fc-mid", "#c97b12");
+            floret.style.setProperty("--fc-dark", "#4c2102");
+            floret.style.setProperty("--fc-glow", "rgba(218, 152, 34, 0.25)");
+          }
+
+          frag.appendChild(floret);
+        }
+
+        field.appendChild(frag);
+      }
+
+      /* ============================================================
+         4. BOKEH HUZMELERİ VE SÜZÜLEN ALTIN TOZ PARÇACIKLARI
+         ============================================================ */
+      function buildAtmosphere() {
+        const farLayer = document.getElementById("layer-far");
+        const midLayer = document.getElementById("layer-mid");
+        const nearLayer = document.getElementById("layer-near");
+
+        const bokehSpecs = [
+          { layer: farLayer, x: 14, y: 24, size: 170, color: "rgba(26, 92, 64, 0.24)", blur: 24, op: 0.42, lens: false },
+          { layer: farLayer, x: 82, y: 18, size: 210, color: "rgba(214, 148, 52, 0.14)", blur: 26, op: 0.36, lens: false },
+          { layer: farLayer, x: 76, y: 74, size: 185, color: "rgba(22, 82, 58, 0.26)", blur: 28, op: 0.4, lens: false },
+          { layer: farLayer, x: 18, y: 78, size: 150, color: "rgba(232, 168, 64, 0.12)", blur: 22, op: 0.35, lens: false },
+          { layer: midLayer, x: 24, y: 34, size: 78, color: "rgba(250, 206, 112, 0.18)", blur: 10, op: 0.36, lens: false },
+          { layer: midLayer, x: 74, y: 28, size: 64, color: "rgba(244, 190, 92, 0.2)", blur: 9, op: 0.38, lens: false },
+          { layer: midLayer, x: 86, y: 56, size: 96, color: "rgba(255, 214, 124, 0.13)", blur: 14, op: 0.34, lens: false },
+          { layer: midLayer, x: 12, y: 58, size: 88, color: "rgba(42, 126, 88, 0.18)", blur: 14, op: 0.38, lens: false },
+          { layer: midLayer, x: 35, y: 16, size: 52, color: "rgba(255, 226, 148, 0.22)", blur: 8, op: 0.42, lens: false },
+          { layer: midLayer, x: 64, y: 80, size: 72, color: "rgba(238, 174, 72, 0.16)", blur: 11, op: 0.34, lens: false },
+          { layer: nearLayer, x: 11, y: 20, size: 68, color: "rgba(255, 224, 146, 0.06)", blur: 0, op: 0.45, lens: true },
+          { layer: nearLayer, x: 88, y: 34, size: 54, color: "rgba(255, 216, 128, 0.06)", blur: 0, op: 0.42, lens: true },
+          { layer: nearLayer, x: 80, y: 84, size: 84, color: "rgba(248, 198, 96, 0.05)", blur: 0, op: 0.38, lens: true },
+          { layer: nearLayer, x: 16, y: 82, size: 48, color: "rgba(255, 232, 168, 0.07)", blur: 0, op: 0.44, lens: true }
+        ];
+
+        bokehSpecs.forEach((b) => {
+          const orb = document.createElement("div");
+          orb.className = "bokeh-orb " + (b.lens ? "lens" : "soft");
+          orb.style.left = b.x + "%";
+          orb.style.top = b.y + "%";
+          orb.style.width = b.size + "px";
+          orb.style.height = b.size + "px";
+          orb.style.background = b.lens
+            ? `radial-gradient(circle at 32% 32%, rgba(255, 240, 194, 0.14), ${b.color} 68%, transparent 100%)`
+            : `radial-gradient(circle, ${b.color} 0%, transparent 72%)`;
+          orb.style.setProperty("--b-blur", b.blur + "px");
+          orb.style.setProperty("--b-op", b.op);
+          orb.style.setProperty("--b-dur", randRange(14, 24).toFixed(1) + "s");
+          orb.style.setProperty("--b-del", (-randRange(0, 14)).toFixed(1) + "s");
+          orb.style.setProperty("--b-dx", randRange(-18, 18).toFixed(1) + "px");
+          orb.style.setProperty("--b-dy", randRange(-22, 16).toFixed(1) + "px");
+          b.layer.appendChild(orb);
+        });
+
+        /* 54 Süzülen Altın Toz Parçacığı */
+        const dustLayers = [farLayer, midLayer, nearLayer];
+        for (let i = 0; i < 54; i++) {
+          const targetLayer = dustLayers[i % 3];
+          const speck = document.createElement("span");
+          speck.className = "dust-speck";
+          const size = i % 3 === 2 ? randRange(2.4, 4.8) : randRange(1.4, 3.4);
+          speck.style.width = size.toFixed(1) + "px";
+          speck.style.height = size.toFixed(1) + "px";
+          speck.style.left = randRange(4, 96).toFixed(2) + "%";
+          speck.style.top = randRange(6, 96).toFixed(2) + "%";
+          speck.style.setProperty("--d-glow", (size * 2.8).toFixed(1) + "px");
+          speck.style.setProperty("--d-dur", randRange(11, 22).toFixed(1) + "s");
+          speck.style.setProperty("--d-twinkle", randRange(2.8, 5.8).toFixed(1) + "s");
+          speck.style.setProperty("--d-del", (-randRange(0, 18)).toFixed(1) + "s");
+          speck.style.setProperty("--d-drift-x", randRange(-26, 26).toFixed(1) + "px");
+          speck.style.setProperty("--d-op", randRange(0.45, 0.92).toFixed(2));
+          targetLayer.appendChild(speck);
+        }
+      }
+
+      /* ============================================================
+         5. ALTIN VARAK TİPOGRAFİ KARAKTER HAZIRLIĞI
+         ============================================================ */
+      function buildTitle() {
+        const titleEl = document.getElementById("title-text");
+        const text = "Çiğdem'in Kasımpatısı";
+        const frag = document.createDocumentFragment();
+        let charIndex = 0;
+
+        for (const ch of text) {
+          if (ch === " ") {
+            const sp = document.createElement("span");
+            sp.className = "title-space";
+            sp.innerHTML = "&nbsp;";
+            frag.appendChild(sp);
+            continue;
+          }
+          const span = document.createElement("span");
+          span.className = "title-char";
+          span.textContent = ch;
+          const delay = 2.72 + charIndex * 0.042;
+          span.style.setProperty("--c-del", delay.toFixed(3) + "s");
+          frag.appendChild(span);
+          charIndex++;
+        }
+
+        titleEl.appendChild(frag);
+      }
+
+      /* ============================================================
+         6. YUMUŞAK 3D FARE PARALAKS ETKİLEŞİMİ & YENİDEN BAŞLATMA
+         ============================================================ */
+      function initParallaxAndPlayback() {
+        const stage = document.getElementById("stage");
+        const flowerRig = document.getElementById("flower-rig");
+
+        let targetX = 0;
+        let targetY = 0;
+        let currentX = 0;
+        let currentY = 0;
+
+        function onPointerMove(clientX, clientY) {
+          const w = window.innerWidth || 1;
+          const h = window.innerHeight || 1;
+          targetX = clamp((clientX / w - 0.5) * 2, -1, 1);
+          targetY = clamp((clientY / h - 0.5) * 2, -1, 1);
+        }
+
+        window.addEventListener("pointermove", (e) => {
+          onPointerMove(e.clientX, e.clientY);
+        });
+
+        window.addEventListener(
+          "touchmove",
+          (e) => {
+            if (e.touches && e.touches[0]) {
+              onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
+            }
+          },
+          { passive: true }
+        );
+
+        document.addEventListener("pointerleave", () => {
+          targetX = 0;
+          targetY = 0;
+        });
+
+        function tick() {
+          currentX += (targetX - currentX) * 0.065;
+          currentY += (targetY - currentY) * 0.065;
+          stage.style.setProperty("--mx", currentX.toFixed(4));
+          stage.style.setProperty("--my", currentY.toFixed(4));
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+
+        function playBloom() {
+          stage.classList.remove("is-playing");
+          void stage.offsetWidth;
+          stage.classList.add("is-playing");
+        }
+
+        flowerRig.addEventListener("click", playBloom);
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(playBloom);
+        });
+      }
+
+      buildCalyx();
+      buildPetals();
+      buildPollenCore();
+      buildAtmosphere();
+      buildTitle();
+      initParallaxAndPlayback();
+    })();
+  </script>
+</body>
+</html>
